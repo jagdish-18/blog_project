@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>BLog</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="bg-gray-100 p-8">
+        <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-2xl font-bold mb-4 text-gray-800">My Blog</h3>
+            <form action="/api/blog/" method="post" class="mb-8">
+                <div class="mb-4">
+                    <label for="title" class="block text-gray-700">Blog Title:</label>
+                    <input type="text" name="title" id="title" class="mt-1 p-2 w-full border rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div class="mb-4">
+                    <label for="description" class="block text-gray-700">Blog Description:</label>
+                    <input type="text" name="description" id="description" placeholder="Enter your description" class="mt-1 p-2 w-full border rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-500 focus:outline-none">Add Blog</button>
+            </form>
+    
+            <hr class="mb-8">
+    
+            <table class="min-w-full bg-white rounded-lg overflow-hidden">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="px-4 py-2 text-left text-gray-700">Sr No.</th>
+                        <th class="px-4 py-2 text-left text-gray-700">Blog Title</th>
+                        <th class="px-4 py-2 text-left text-gray-700">Blog Description</th>
+                        <th class="px-4 py-2 text-left text-gray-700">Date</th>
+                        <th class="px-4 py-2 text-left text-gray-700">Time</th>
+                        <th class="px-4 py-2 text-left text-gray-700">Edit</th>
+                        <th class="px-4 py-2 text-left text-gray-700">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(let i = 0; i < blogs.length; i++) {%>
+                        <tr class="border-t">
+                            <td class="px-4 py-2"><%= i+1 %></td>
+                            <td class="px-4 py-2"><%= blogs[i].title %></td>
+                            <td class="px-4 py-2"><%= blogs[i].description %></td>
+                            <td class="px-4 py-2"><%= blogs[i].date.toDateString() %></td>
+                            <td class="px-4 py-2"><%= blogs[i].date.toLocaleTimeString() %></td>
+                            <td class="px-4 py-2">
+                                <form action="/api/blog/<%= blogs[i]._id %>/edit" method="get">
+                                    <button class="text-blue-600 hover:text-blue-800">edit</button>
+                                </form>
+                            </td>
+                            <td class="px-4 py-2">
+                                <form action="/api/blog/<%= blogs[i]._id %>" method="post">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <button class="text-red-600 hover:text-red-800">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </body>
+    
+</html>
