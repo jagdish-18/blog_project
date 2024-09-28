@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register Form</title>
+    <title>OTP verification</title>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -68,7 +68,7 @@
             color: #ccc; /* Lighter label color for contrast */
         }
     
-        input[type="text"], input[type="password"]{
+        input{
             width: 100%;
             padding: 12px;
             border: 2px solid #555; /* Darker border for the input fields */
@@ -118,21 +118,12 @@
     
 </head>
 <body>
-    <form action="/api/user/register"  method="post">
-        <h1>Register Form </h1>
-        <label for="firstname">First Name:</label>
-        <input type="text" name="firstname" id="firstname" placeholder="Enter your first name" required>
-        
-        <label for="lastname">Last Name:</label>
-        <input type="text" name="lastname" id="lastname" placeholder="Enter your last name" required>
-        
-        <label for="email">Email:</label>
-        <input type="text" name="email" id="email" placeholder="Enter your email" required>
-        
-        <label for="password">Password:</label>
-        <input type="password" name="password" id="password" placeholder="Enter your password" required>
-        <a href="/api/user/login    ">You already have an account?</a>
-        <button type="submit">Register Now</button>
+    <form action="/api/user/verifyotp" method="post">
+        <h1>OTP Sent In Your Email</h1>
+        <label for="otp">Enter OTP Here:</label>
+        <input type="number" name="otp" id="otp" placeholder="Enter your OTP" pattern="\d{4}" title="Please enter 4 digit number"  required>
+        <a href="/api/user/resendotp">Resend OTP</a>
+        <button type="submit">Verify OTP</button>
     </form>
 </body>
 </html>

@@ -1,6 +1,6 @@
 const User  = require('../model/user.model');
 const bcrypt = require('bcrypt');
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 
 exports.showRegisterPage = async (req, res)=>{
     try {
@@ -13,21 +13,16 @@ exports.showRegisterPage = async (req, res)=>{
 
 exports.registerUser = async (req, res) => {
     try {
-        let user  = await User.findOne({email: req.body.email , isDelete : false});
-        if(user){
-            return res.json({message: "User already register please login"});
-        }
-
-        let hashPassword = await bcrypt.hash(req.body.password , 10);
-        // console.log(hashPassword , "bcript password");
-        user = await User.create({...req.body , password : hashPassword});
-        user.save();
-        res.redirect("/api/user/login")
+        let user = await User.findOne({ email: req.body.email });
+        if (user) return res.redirect("/api/user/login");
+        let hashedPassword = await bcrypt.hash(req.body.password, 10);
+        user = await User.create({...req.body, password: hashedPassword });
+        res.redirect("/api/user/login");
     } catch (error) {
         console.log(error);
-        res.json({messag: "Server error"});
+        res.json({ message: "Server error..." });
     }
-}
+};
 
 
 exports.showLoginPage = async (req, res)=>{
@@ -35,29 +30,28 @@ exports.showLoginPage = async (req, res)=>{
         res.render("login.ejs");
     } catch (error) {
         console.log(error);
-        res.json({messag: "Server error"});
+        res.json({messag: "Server error..."});
     }
 };
 
-exports.loginUser = async(req, res)=>{
+exports.loginUser = async (req, res) => {
     try {
-        let user = await User.findOne({email: req.body.email , isDelete : false});
-        if(!user){
-            return res.redirect("register");
+        let user = await User.findOne({ email: req.body.email });
+        if (!user) {
+            return res.render("login", { message: 'Email or password is incorrect' });
         }
-        console.log(user);
-        let matchPassword = await bcrypt.compare(req.body.password , user.password);
-
-        if(!matchPassword){
-            return res.status(400).json({message : "Email Or Password Not metched...."})
+        let matchPassword = await bcrypt.compare(req.body.password, user.password);
+        if (!matchPassword) {
+            return res.render("login", { message: 'Email or password is incorrect' });
         }
-        let token = await jwt.sign({userId : user._id} , process.env.LOGIN_SECRETKEY);
+        let token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
         // console.log(token);
-        res.cookie('token', token, { httpOnly: true });
-        res.redirect("/api/blog")
-        
+        // res.json({message : ' login succeess'})
+        res.cookie('Authorization', token);
+        // res.json({message : 'login succcess...'});
+        res.redirect("/api/blog");
     } catch (error) {
         console.log(error);
-        res.json({messag: "Server error"}); 
+        res.json({ message: "Server error" });
     }
-}
+};

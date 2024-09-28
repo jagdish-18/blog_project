@@ -1,13 +1,13 @@
 const express = require('express');
-const { showBlogPage, addBlog ,editBlog ,deleteBlog, updateBlog} = require('../controller/blog.controller');
-const { verifyToken } = require('../helpers/verifyToken');
+const { showBlogPage, addBlog ,deleteBlog} = require('../controller/blog.controller');
+const { verifyToken } = require('../helper/tokenVerify');
 const blogRoutes = express.Router();
 
+
 blogRoutes.get("/", verifyToken, showBlogPage);
-blogRoutes.post("/",verifyToken, addBlog);
-blogRoutes.get("/:id/edit", editBlog);
-blogRoutes.post("/:id/edit", updateBlog);
-blogRoutes.post("/:id", deleteBlog);
+blogRoutes.post("/", verifyToken ,addBlog);
 
 
 module.exports = blogRoutes;
+
+

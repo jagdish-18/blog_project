@@ -13,10 +13,6 @@ const userSchema  = mongoose.Schema({
     password: {
         type: String
     },
-    isDelete :{
-        type : Boolean,
-        default : false
-    }
 },{
     versionKey: false
 });
